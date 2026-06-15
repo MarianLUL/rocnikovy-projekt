@@ -1,0 +1,19 @@
+Valorant Agents Django App
+
+Krátká dokumentace projektu.
+
+1) Instalace
+   - Vytvořte virtuální prostředí `python venv .venv ` .
+   - Nainstalujte závislosti: `pip install -r requirements.txt`
+
+2) Migrace a data
+   - Spusťte migrace: `python manage.py makemigrations` a `python manage.py migrate`
+   - Naplňte ukázková data a vytvořte superuživatele: `python populate_data.py`
+     (superuživatel: admin / adminpass)
+
+3) Spuštění
+   - `python manage.py runserver`
+   - Otevřete http://127.0.0.1:8000/ pro zobrazení seznamu agentů
+   - Admin: http://127.0.0.1:8000/admin/ (přihlaste se admin/adminpass)
+
+Poznámka: změňte heslo superuživatele po prvním přihlášení.

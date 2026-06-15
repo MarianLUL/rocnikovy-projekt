@@ -1,0 +1,41 @@
+{% extends 'agents/base.html' %}
+
+{% block content %}
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+    <h2>VALORANT Agents Library</h2>
+    <div><a href="{% url 'agents:home' %}">← Back to VALORANT Library</a></div>
+  </div>
+  <div style="display:flex;gap:24px;align-items:flex-start">
+    <aside style="min-width:200px">
+      <h3>Roles</h3>
+      <ul>
+        <li><a href="{% url 'agents:index' %}">All</a></li>
+        {% for r in roles %}
+          <li>
+            <a href="{% url 'agents:index' %}?role={{ r.id }}" {% if selected_role|stringformat:"s" == r.id|stringformat:"s" %}style="font-weight:bold"{% endif %}>{{ r.name }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </aside>
+
+    <section style="flex:1">
+      {% if agents %}
+        <div class="agents-grid">
+          {% for agent in agents %}
+            <div class="agent-card">
+              {% if agent.image_url %}
+                <img src="{{ agent.image_url }}" alt="{{ agent.name }}">
+              {% else %}
+                <div style="height:110px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.02);border-radius:6px">No image</div>
+              {% endif %}
+              <div class="name"><a href="{% url 'agents:agent_detail' agent.pk %}">{{ agent.name }}</a></div>
+              <div class="role">{{ agent.role.name }}</div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p>No agents found.</p>
+      {% endif %}
+    </section>
+  </div>
+{% endblock %}

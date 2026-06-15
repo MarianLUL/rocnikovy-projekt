@@ -1,0 +1,14 @@
+{% extends 'agents/base.html' %}
+
+{% block content %}
+  <h2>Login</h2>
+  <form method="post" action="{% url 'agents:login' %}">
+    {% csrf_token %}
+    <div style="max-width:320px">
+      <label>Username<br><input type="text" name="username" required style="width:100%;padding:8px;margin-top:6px"></label>
+      <label style="display:block;margin-top:8px">Password<br><input type="password" name="password" required style="width:100%;padding:8px;margin-top:6px"></label>
+      <div style="margin-top:12px"><button type="submit" style="padding:8px 12px">Log in</button></div>
+      <p style="margin-top:8px"><a href="{% url 'agents:register' %}">Create account</a></p>
+    </div>
+  </form>
+{% endblock %}

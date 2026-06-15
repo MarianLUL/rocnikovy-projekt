@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Valorant </title>
+    <style>
+      body { font-family: Arial, sans-serif; margin: 0 20px; background: #0f1113; color: #e6e6e6 }
+      a { color: #7fb4ff }
+      /* site title color */
+      header .site-title a { color: #ff6b6b; text-decoration: none }
+      header .site-title a:hover { text-decoration: underline }
+      /* header and footer: slightly lighter gray and full-bleed to page edges */
+      header { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; background:#262626; padding:16px 20px; width:calc(100% + 40px); margin-left:-20px; border-radius:0; box-sizing:border-box }
+      header a { color:inherit }
+      footer { margin-top:28px; padding:16px 20px; background:#262626; width:calc(100% + 40px); margin-left:-20px; border-radius:0; color:#bfc7d6; font-size:0.9rem; box-sizing:border-box; border-top:1px solid rgba(255,255,255,0.02) }
+      /* Page enter animation: fade + slight slide-up for a smooth appearance */
+      @keyframes fadeSlide {
+        from { opacity: 0; transform: translateY(10px) }
+        to { opacity: 1; transform: translateY(0) }
+      }
+      @keyframes imgPop {
+        from { opacity: 0; transform: scale(0.98) }
+        to { opacity: 1; transform: scale(1) }
+      }
+      .page-enter { animation: fadeSlide 360ms ease both }
+      .page-enter img { animation: imgPop 420ms ease both }
+      /* Weapon card styles: dark theme, reveal details on hover */
+      .weapon-card { background: #2b2b2b; padding: 8px; border-radius: 8px; transition: transform 220ms ease, box-shadow 220ms ease, background 220ms ease; color: #e6e6e6 }
+      .weapon-card:hover { transform: translateY(-6px); box-shadow: 0 8px 26px rgba(0,0,0,0.6); background: #343434 }
+      .weapon-img-wrap { height:120px; display:flex; align-items:center; justify-content:center; background:#1f1f1f; border-radius:6px; overflow:hidden }
+      .weapon-card img { max-height:110px; max-width:100%; object-fit:contain }
+      .weapon-meta { font-size:0.95em; color:#dcdcdc; transition: max-height 260ms ease, opacity 260ms ease; opacity:0; max-height:0; overflow:hidden }
+      .weapon-card:hover .weapon-meta { opacity:1; max-height:240px }
+      /* Agent card tweaks for dark theme */
+      .agent { display:flex; gap:12px; align-items:center; margin-bottom:12px; background: rgba(255,255,255,0.02); padding:8px; border-radius:8px }
+      .agent-card { background: rgba(255,255,255,0.02); padding:8px; border-radius:8px; text-align:center }
+      .agent-card img { width:100%; height:110px; object-fit:cover; border-radius:6px }
+      .agent-card .role { font-size:0.9em; color:#bfb7c4 }
+      .agent { display:flex; gap:12px; align-items:center; margin-bottom:12px; background: rgba(255,255,255,0.03); padding:8px; border-radius:8px }
+      img.agent-thumb { width:80px; height:80px; object-fit:cover; border-radius:6px }
+      .agents-table { width: 100%; border-collapse: collapse; margin-top: 12px }
+      .agents-table th, .agents-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.06) }
+      .agents-table th { background: rgba(255,255,255,0.04); color: #fff }
+      img.agent-thumb-small { width:60px; height:60px; object-fit:cover; border-radius:6px }
+
+      /* Responsive grid layout for agent cards: rows with variable number of cards */
+      .agents-grid { display: grid; gap: 12px; margin-top: 12px }
+      /* default: small devices - 2 columns */
+      .agents-grid { grid-template-columns: repeat(2, 1fr) }
+      /* medium: show 5 cards per row */
+      @media (min-width: 640px) {
+        .agents-grid { grid-template-columns: repeat(5, 1fr) }
+      }
+      /* large: show 6 cards per row */
+      @media (min-width: 900px) {
+        .agents-grid { grid-template-columns: repeat(6, 1fr) }
+      }
+      /* xlarge: show 8 cards per row */
+      @media (min-width: 1200px) {
+        .agents-grid { grid-template-columns: repeat(8, 1fr) }
+      }
+
+      .agent-card { background: rgba(255,255,255,0.03); padding:8px; border-radius:8px; text-align:center }
+      .agent-card img { width:100%; height:110px; object-fit:cover; border-radius:6px }
+      .agent-card .name { margin-top:8px; font-weight:600 }
+      .agent-card .role { font-size:0.9em; color:#d6c0e6 }
+      .map-grid { display:grid; grid-template-columns: repeat(1, 1fr); gap:16px; margin-top:16px }
+      @media (min-width: 640px) { .map-grid { grid-template-columns: repeat(2, 1fr) } }
+      @media (min-width: 980px) { .map-grid { grid-template-columns: repeat(3, 1fr) } }
+      .map-card { display:block; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow:hidden; text-decoration:none; color:inherit; transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease }
+      .map-card:hover { transform: translateY(-4px); box-shadow: 0 14px 28px rgba(0,0,0,0.35); background: rgba(255,255,255,0.07) }
+      .map-card img { width:100%; height:180px; object-fit:cover; display:block }
+      .map-card-empty { display:flex; align-items:center; justify-content:center; width:100%; height:180px; background: linear-gradient(135deg, #18202c, #2b3440); color:#edf5ff; font-weight:700; text-align:center; padding:12px }
+      .map-card-body { padding:12px }
+      .map-card h3 { margin: 0 0 6px; font-size: 1.05rem }
+      .map-card p { margin: 0; color: #d7d7e6; font-size: 0.95rem }
+      .mode-pill { display:inline-block; margin-right:6px; margin-top:6px; border-radius:999px; background: rgba(127,180,255,0.12); color: #dbe7ff; padding: 4px 8px; font-size: 0.82rem }
+      .map-detail { display:grid; gap:18px }
+      .map-detail img { width:100%; max-width:900px; border-radius: 18px; box-shadow: 0 18px 40px rgba(0,0,0,0.35) }
+      nav.roles a { margin-right:8px; color:#ffd7ff }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1 class="site-title" style="display:inline-block;margin:0"><a href="{% url 'agents:home' %}">VALORANT Library</a></h1>
+      <div style="margin-left:auto;margin-top:6px">
+        {% if user.is_authenticated %}
+          <span style="margin-right:8px">Hi {{ user.username }}</span>
+          <a href="{% url 'agents:logout' %}">Logout</a>
+          {% if user.is_staff %} | <a href="/admin/">Admin</a>{% endif %}
+        {% else %}
+          <a href="{% url 'agents:login' %}">Login</a>
+        {% endif %}
+      </div>
+    </header>
+    <main class="page-enter">
+      {% block content %}{% endblock %}
+    </main>
+    <footer>
+      <div>© Valorant Library • <a href="{% url 'agents:home' %}">Home</a> • Built with Django</div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,33 @@
+{% extends 'agents/base.html' %}
+
+{% block content %}
+  <h2>Weapons</h2>
+  {% if weapons %}
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px">
+      {% for w in weapons %}
+        <div class="weapon-card">
+          <div class="weapon-img-wrap">
+            {% if w.image_url %}
+              <img src="{{ w.image_url }}" alt="{{ w.name }}" style="max-height:110px;max-width:100%;object-fit:contain">
+            {% elif w.metadata.displayIcon %}
+              <img src="{{ w.metadata.displayIcon }}" alt="{{ w.name }}" style="max-height:110px;max-width:100%;object-fit:contain">
+            {% elif w.metadata.displayIconSmall %}
+              <img src="{{ w.metadata.displayIconSmall }}" alt="{{ w.name }}" style="max-height:110px;max-width:100%;object-fit:contain">
+            {% else %}
+              <div style="color:#888">No image</div>
+            {% endif %}
+          </div>
+          <div style="margin-top:8px;font-weight:600"><a href="{% url 'agents:weapon_detail' w.pk %}">{{ w.name }}</a></div>
+          {% load weapon_extras %}
+          <div class="weapon-meta">
+            <div>Category: {% if w.metadata.shop_category %}{{ w.metadata.shop_category }}{% elif w.metadata.shopData.category %}{{ w.metadata.shopData.category }}{% elif w.metadata.category %}{{ w.metadata.category }}{% else %}{{ w.weapon_type|equip_category }}{% endif %}</div>
+            <div>Cost: {{ w.cost }}</div>
+            <div>Magazine: {{ w.magazine }}</div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>No weapons yet.</p>
+  {% endif %}
+{% endblock %}

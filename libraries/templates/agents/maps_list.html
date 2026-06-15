@@ -1,0 +1,51 @@
+{% extends 'agents/base.html' %}
+
+{% block content %}
+  <h2>Maps</h2>
+  <p>Vyber si mapu a otevři detail s její in-game podobou.</p>
+
+  {% if maps_by_mode %}
+    {% for mode, maps in maps_by_mode %}
+      <h3>{{ mode.name }}</h3>
+      {% if maps %}
+        <div class="map-grid">
+          {% for m in maps %}
+            <a class="map-card" href="{% url 'agents:map_detail' m.pk %}">
+              {% if m.image_url %}
+                <img src="{{ m.image_url }}" alt="{{ m.name }}">
+              {% else %}
+                <div class="map-card-empty">{{ m.name }}</div>
+              {% endif %}
+              <div class="map-card-body">
+                <h3>{{ m.name }}</h3>
+                <p>{{ m.description|default:'Map detail with in-game preview.' }}</p>
+                {% for mode_tag in m.modes.all %}<span class="mode-pill">{{ mode_tag.name }}</span>{% endfor %}
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p>No maps for this mode.</p>
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+
+  {% if uncategorized %}
+    <h3>Uncategorized</h3>
+    <div class="map-grid">
+      {% for m in uncategorized %}
+        <a class="map-card" href="{% url 'agents:map_detail' m.pk %}">
+          {% if m.image_url %}
+            <img src="{{ m.image_url }}" alt="{{ m.name }}">
+          {% else %}
+            <div class="map-card-empty">{{ m.name }}</div>
+          {% endif %}
+          <div class="map-card-body">
+            <h3>{{ m.name }}</h3>
+            <p>{{ m.description|default:'Map detail with in-game preview.' }}</p>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endblock %}

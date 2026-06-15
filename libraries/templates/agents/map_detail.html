@@ -1,0 +1,19 @@
+{% extends 'agents/base.html' %}
+
+{% block content %}
+  <div class="map-detail">
+    <h2>{{ map.name }}</h2>
+    <p style="color:#dbe7ff; margin-top:-8px">In-game preview</p>
+    {% if map.image_url %}
+      <img src="{{ map.image_url }}" alt="{{ map.name }} in-game view">
+    {% else %}
+      <p>No image is available for this map yet.</p>
+    {% endif %}
+    {% if map.modes.all %}
+      <div>
+        {% for mode in map.modes.all %}<span class="mode-pill">{{ mode.name }}</span>{% endfor %}
+      </div>
+    {% endif %}
+    <div style="color:#e7e7ef; line-height:1.5">{{ map.description|default:'This map has no description yet.' }}</div>
+  </div>
+{% endblock %}

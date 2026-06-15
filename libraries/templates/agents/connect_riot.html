@@ -1,0 +1,15 @@
+{% extends 'agents/base.html' %}
+
+{% block content %}
+  <h2>Connect Riot Account</h2>
+  {% if error %}
+    <div style="color:red">{{ error }}</div>
+    {% if details %}<pre>{{ details }}</pre>{% endif %}
+  {% endif %}
+  {% if success %}
+    <div style="color:green">Riot account linked: {{ riot_account.display_name }} ({{ riot_account.riot_id }})</div>
+  {% else %}
+    <p>To link your Riot account, click below. You must be logged in.</p>
+    <a href="{% url 'agents:connect_riot' %}">Connect Riot</a>
+  {% endif %}
+{% endblock %}

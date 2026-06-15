@@ -1,0 +1,37 @@
+{% extends 'agents/base.html' %}
+
+{% block content %}
+  <h2>{{ agent.name }}</h2>
+  {% if user.is_staff %}
+    <div style="text-align:right;margin-bottom:8px"><a href="/admin/agents/agent/{{ agent.pk }}/change/">Edit in admin</a></div>
+  {% endif %}
+  <div style="display:flex;flex-direction:column;gap:12px;align-items:stretch">
+    {% if agent.image_url %}
+      <div style="width:100%;max-width:480px;margin:0 auto;text-align:center">
+      {% if agent.full_portrait_url %}
+        <a href="{{ agent.full_portrait_url }}" target="_blank" rel="noopener">
+          <img src="{{ agent.image_url }}" style="width:100%;max-width:480px;height:auto;object-fit:contain;border-radius:8px;cursor:pointer" alt="{{ agent.name }}">
+        </a>
+      {% else %}
+        <img src="{{ agent.image_url }}" style="width:100%;max-width:480px;height:auto;object-fit:contain;border-radius:8px" alt="{{ agent.name }}">
+      {% endif %}
+      </div>
+    {% endif %}
+    <div style="max-width:720px;margin:0 auto">
+      <p><strong>Role:</strong> {{ agent.role.name }}</p>
+      <p>{{ agent.description }}</p>
+      <h3>Abilities</h3>
+      <ul>
+        {% for ability in agent.abilities.all %}
+          <li>
+            <strong>{{ ability.name }}</strong> {% if ability.key %}({{ ability.key }}){% endif %}
+            {% if ability.is_ultimate %} - Ultimate{% endif %}
+            <div>{{ ability.description }}</div>
+          </li>
+        {% empty %}
+          <li>No abilities recorded.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+{% endblock %}

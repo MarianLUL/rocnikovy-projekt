@@ -1,0 +1,50 @@
+{% extends 'agents/base.html' %}
+
+{% block content %}
+  <section class="page-enter">
+
+    <div class="map-grid">
+      <a class="map-card" href="{% url 'agents:index' %}">
+        {% if featured_agent and featured_agent.image_url %}
+          <img src="{{ featured_agent.image_url }}" alt="{{ featured_agent.name }}">
+        {% else %}
+          <div class="map-card-empty">Agents</div>
+        {% endif %}
+        <div class="map-card-body">
+          <h3>Agents</h3>
+          <p>Objevte agenty, jejich role a full portraity.</p>
+        </div>
+      </a>
+
+      <a class="map-card" href="{% url 'agents:weapons_list' %}">
+        {% if featured_weapon %}
+          {% if featured_weapon.image_url %}
+            <img src="{{ featured_weapon.image_url }}" alt="{{ featured_weapon.name }}">
+          {% elif featured_weapon.metadata.displayIcon %}
+            <img src="{{ featured_weapon.metadata.displayIcon }}" alt="{{ featured_weapon.name }}">
+          {% else %}
+            <div class="map-card-empty">Weapons</div>
+          {% endif %}
+        {% else %}
+          <div class="map-card-empty">Weapons</div>
+        {% endif %}
+        <div class="map-card-body">
+          <h3>Weapons</h3>
+          <p>Podívejte se na zbraně, statistiky a typy.</p>
+        </div>
+      </a>
+
+      <a class="map-card" href="{% url 'agents:maps_list' %}">
+        {% if featured_map and featured_map.image_url %}
+          <img src="{{ featured_map.image_url }}" alt="{{ featured_map.name }}">
+        {% else %}
+          <div class="map-card-empty">Maps</div>
+        {% endif %}
+        <div class="map-card-body">
+          <h3>Maps</h3>
+          <p>Prohlédněte si mapy s jejich in-game vizí.</p>
+        </div>
+      </a>
+    </div>
+  </section>
+{% endblock %}

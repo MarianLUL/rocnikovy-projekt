@@ -1,0 +1,64 @@
+{% extends 'agents/base.html' %}
+
+{% block content %}
+  <h2>{{ weapon.name }}</h2>
+  {% if user.is_staff %}
+    <div style="text-align:right;margin-bottom:8px"><a href="/admin/agents/weapon/{{ weapon.pk }}/change/">Edit in admin</a></div>
+  {% endif %}
+  <div style="display:flex;flex-direction:column;gap:16px;align-items:stretch">
+    <div style="width:100%;max-width:640px;margin:0 auto;text-align:center">
+      {% if weapon.image_url %}
+        <img src="{{ weapon.image_url }}" style="width:100%;height:auto;border-radius:6px">
+      {% elif weapon.metadata.displayIcon %}
+        <img src="{{ weapon.metadata.displayIcon }}" style="width:100%;height:auto;border-radius:6px">
+      {% elif weapon.metadata.displayIconSmall %}
+        <img src="{{ weapon.metadata.displayIconSmall }}" style="width:100%;height:auto;border-radius:6px">
+      {% else %}
+        <div style="height:200px;display:flex;align-items:center;justify-content:center;background:#111;border-radius:6px;color:#777">No image</div>
+      {% endif %}
+      <p style="max-width:720px;margin:8px auto 0">{{ weapon.description }}</p>
+    </div>
+    <div style="width:100%">
+      {% load weapon_extras %}
+      <table style="width:100%;border-collapse:collapse">
+        <tr><th style="text-align:left;padding:6px">Category</th><td style="padding:6px">{% if weapon.metadata.shop_category %}{{ weapon.metadata.shop_category }}{% elif weapon.metadata.shopData.category %}{{ weapon.metadata.shopData.category }}{% elif weapon.metadata.category %}{{ weapon.metadata.category }}{% else %}{{ weapon.weapon_type|equip_category }}{% endif %}</td></tr>
+        <tr><th style="text-align:left;padding:6px">Cost</th><td style="padding:6px">{{ weapon.cost }}</td></tr>
+        <tr><th style="text-align:left;padding:6px">Magazine</th><td style="padding:6px">{{ weapon.magazine }}</td></tr>
+        <tr><th style="text-align:left;padding:6px">Fire rate</th><td style="padding:6px">{{ weapon.fire_rate }}</td></tr>
+        <tr><th style="text-align:left;padding:6px">Max range (m)</th><td style="padding:6px">{{ weapon.max_range_m }}</td></tr>
+        <tr><th style="text-align:left;padding:6px">Run speed mult.</th><td style="padding:6px">{{ weapon.run_speed_multiplier }}</td></tr>
+        <tr><th style="text-align:left;padding:6px">Wall penetration</th><td style="padding:6px">{{ weapon.wall_penetration }}</td></tr>
+        <tr><th style="text-align:left;padding:6px">Equip time (s)</th><td style="padding:6px">{{ weapon.equip_time_seconds }}</td></tr>
+        <tr><th style="text-align:left;padding:6px">Reload time (s)</th><td style="padding:6px">{{ weapon.reload_time_seconds }}</td></tr>
+        <tr><th style="text-align:left;padding:6px">ADS zoom</th><td style="padding:6px">{{ weapon.ads_zoom_multiplier }}</td></tr>
+      </table>
+
+      <h3>Firing modes</h3>
+      {% if weapon.firing_modes %}
+        <pre style="background:#111;padding:8px;border-radius:6px;overflow:auto">{{ weapon.firing_modes }}</pre>
+      {% else %}
+        <p>Not specified.</p>
+      {% endif %}
+
+      <h3>Damage profile</h3>
+      {% if weapon.damage_profile %}
+        <table style="width:100%;border-collapse:collapse;border:1px solid rgba(255,255,255,0.06)">
+          <tr><th style="text-align:left;padding:6px">Range start (m)</th><th style="text-align:left;padding:6px">Head</th><th style="text-align:left;padding:6px">Body</th><th style="text-align:left;padding:6px">Leg</th></tr>
+          {% for d in weapon.damage_profile %}
+            <tr>
+              <td style="padding:6px">{% if d.rangeStartMeters %}{{ d.rangeStartMeters }}{% elif d.rangeStart %}{{ d.rangeStart }}{% elif d.range_start_m %}{{ d.range_start_m }}{% else %}-{% endif %}</td>
+              <td style="padding:6px">{{ d.head|default:"-" }}</td>
+              <td style="padding:6px">{{ d.body|default:"-" }}</td>
+              <td style="padding:6px">{{ d.leg|default:"-" }}</td>
+            </tr>
+          {% endfor %}
+        </table>
+      {% else %}
+        <p>No damage profile recorded.</p>
+      {% endif %}
+
+      <h3>Raw metadata</h3>
+      <pre style="background:#111;padding:8px;border-radius:6px;overflow:auto;white-space:pre-wrap">{{ weapon.metadata|prettyjson }}</pre>
+    </div>
+  </div>
+{% endblock %}

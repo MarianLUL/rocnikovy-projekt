@@ -1,0 +1,12 @@
+{% extends 'agents/base.html' %}
+
+{% block content %}
+  <h2>Create account</h2>
+  <p>Register as a normal user. Admin changes still go through the admin panel.</p>
+  <form method="post" action="{% url 'agents:register' %}" style="max-width:360px">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Register</button>
+  </form>
+  <p style="margin-top:8px"><a href="{% url 'agents:login' %}">Already have an account? Log in</a></p>
+{% endblock %}
